@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>api test</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    </head>
+
+    <body>
+        <script>
+            const dept_FI = {
+                        deptId:'2355',
+                        deptName:'재경팀 회계담당'
+                    }
+            
+            function getDeptList() {
+                return new Promise(function (resolve, reject) {
+                    $.get('http://127.0.0.1:3000/depts', function (g1) {
+                        console.log('1. get depts :', g1);
+                        resolve(g1);
+                    });
+                });
+            }
+            
+            function getEmp(id) {
+                return new Promise(function (resolve, reject) {
+                    $.get('http://127.0.0.1:3000/emps/' + id, function (g2) {
+                        console.log('2. get emps/22210 :', g2);
+                        resolve(g2);
+                    });
+                });
+            }
+            
+            function createDept(dept) {
+                return new Promise(function (resolve, reject) {
+                    $.post('http://127.0.0.1:3000/depts', dept, function (p1) {
+                        console.log('3. post depts :', p1);
+                        resolve(p1);
+                    });
+                });
+            }
+            
+            function getDept(id) {
+                return new Promise(function (resolve, reject) {
+                    $.get('http://127.0.0.1:3000/depts/' + id, function (g3) {
+                        console.log('4. get depts/2355 :', g3);
+                        resolve(g3);
+                    });
+                });
+            }
+                        
+            getDeptList()
+            .then(function () {
+                return getEmp(22210);
+            })
+            .then(function () {
+                return createDept(dept_FI)
+            })
+            .then(function (dept) {
+                return getDept(dept.deptId)
+            })
+            .then(function (dept) {
+              return new Promise(function (resolve, reject) {
+                  $.ajax({
+                    url: 'http://127.0.0.1:3000/emps/22210',
+                    type : 'PUT',
+                    contentType: 'application/json',
+                    data : JSON.stringify(dept),
+                    success: function(p2) {
+                        console.log('5. put emps/22210 :', p2)
+                        resolve(p2);
+                    }
+                });
+              });
+            })
+            .then(function () {
+                return new Promise(function (resolve, reject) {
+                    $.get('http://127.0.0.1:3000/depts/2180/emps', function(g4) {
+                        console.log('6. get depts/2180/emps :', g4);
+                    })
+                });
+            });
+            
+            
+//            $.get('http://127.0.0.1:3000/depts', function (g1) {
+//                console.log('1. get depts :', g1);
+//                
+//                $.get('http://127.0.0.1:3000/emps/22210', function (g2) {
+//                    console.log('2. get emps/22210 :', g2);
+//                    
+//                    const dept_FI = {
+//                        deptId:'2355',
+//                        deptName:'재경팀 회계담당'
+//                    }
+//
+//                    $.post('http://127.0.0.1:3000/depts', dept_FI, function (p1) {
+//                        console.log('3. post depts :', p1);
+//                        
+//                        $.get('http://127.0.0.1:3000/depts/2355', function (g3) {
+//                            console.log('4. get depts/2355 :', g3);
+//                            
+//                            $.ajax({
+//                                url: 'http://127.0.0.1:3000/emps/22210',
+//                                type : 'PUT',
+//                                contentType: 'application/json',
+//                                data : JSON.stringify(dept_FI),
+//                                success: function(p2) {
+//                                    console.log('5. put emps/22210 :', p2);
+//                                    
+//                                    $.get('http://127.0.0.1:3000/depts/2180/emps', function(g4) {
+//                                        console.log('6. get depts/2180/emps :', g4);
+//                                    })
+//                                }
+//                            });
+//                        });
+//                    });
+//                });
+//            });
+
+//            Promise.all(deptids.map(function (deptid) {
+//                return $.get('http://127.0.0.1:3000/depts/' + deptid);
+//            }))
+//            .then(function (result) {
+//                return result.map(function (dept) {
+//                    return dept.name;
+//                });
+//            })
+//            .then(function (result) {
+//                console.log(result);
+//            });
+
+        </script>
+    </body>
+</html>
