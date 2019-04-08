@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>api test</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    </head>
+
+    <body>
+        <script>
+            $.get('http://127.0.0.1:3000/depts', function (result) {
+                console.log(result);
+            });
+
+            $.get('http://127.0.0.1:3000/emps', function (result) {
+                console.log(result);
+            });
+
+            $.get('http://127.0.0.1:3000/depts/2180', function (result) {
+                console.log(result);
+            });
+
+            $.post('http://127.0.0.1:3000/depts', {id:2355, name:'재경팀 회계담당'}, function (result) {
+                console.log(result);
+            });
+
+            const deptids = ['2180', '2355'];
+            
+            Promise.all(deptids.map(function (deptid) {
+                return $.get('http://127.0.0.1:3000/depts/' + deptid);
+            }))
+            .then(function (result) {
+                return result.map(function (dept) {
+                    return dept.name;
+                });
+            })
+            .then(function (result) {
+                console.log(result);
+            });
+        </script>
+    </body>
+</html>
